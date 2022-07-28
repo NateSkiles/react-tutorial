@@ -3,18 +3,45 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 
 class Square extends React.Component {
+    // Render a button to create a square
     render() {
         return (
-            <button className="square">
-                {/* TODO */}
+            <button
+                className="square"
+                // When the button (square) is clicked, set the state.value
+                onClick={() => this.props.onClick()}
+            >
+                {/* Display value from the prop passed by board */}
+                {this.props.value}
             </button>
         );
     }
 }
 
 class Board extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            // Create empty array/board & maintains which squares are filled
+            squares: Array(9).fill(null)
+        }
+    }
+
+    handleClick(i) {
+        const squares = this.state.squares.slice();
+        squares[i] = 'X';
+        this.setState({squares: squares});
+    }
+
+    // Creates  component
     renderSquare(i) {
-        return <Square />;
+        return (
+            <Square
+                // Pass the state from the board to the square as a prop
+                value={this.state.squares[i]}
+                onClick={() => this.handleClick(i)}
+            />
+        );
     }
 
     render() {
@@ -23,6 +50,7 @@ class Board extends React.Component {
         return (
             <div>
                 <div className="status">{status}</div>
+                {/* Render 3 squares for each row - props value correspond to the index of the square */}
                 <div className="board-row">
                     {this.renderSquare(0)}
                     {this.renderSquare(1)}
